@@ -1,0 +1,54 @@
+# db_devices contains the configuration to access a database containing the list of IP addresses
+# of the devices that will be polled via lld and cdp to generate layer 2 adjacencies.
+
+[db_devices]
+# type can be either 'mysql' or 'postgresql'. It determines which driver will be used to connect.
+type = 'postgresql'
+# database is the name of the database
+database = 'netbox'
+# host where the database is running
+host = '127.0.0.1'
+# port where the database is listening
+port = 5432
+# database user
+user = 'netbox'
+# database password
+password = ''
+# query is the SQL query that will be run to obtain the list of IPs to be polled.
+# The response to this query must contain a column named as the value of ip_field in this config.
+query = "select device.name as name, ips.address as ip from dcim_device as device, ipam_ipaddress as ips where device.custom_field_data->>'Loopback_IP' IS NOT NULL and CAST(device.custom_field_data->'Loopback_IP' AS BIGINT)=ips.id and ( device.role_id = 6 or device.role_id = 7)"
+# ip_field is the name of the column in the response to the query that contains the ip address of the device.
+ip_field = 'ip'
+
+#db_topology contains the configuration to access the database where the result of the polling will be stored.
+[db_topology]
+# type can be either 'mysql' or 'postgresql'. It determines which driver will be used to connect.
+type = 'mysql'
+# db is the name of the database
+db = 'l2topology'
+# host where the database is running
+host = '127.0.0.1'
+# port where the database is listening
+port = 3306
+# database user
+user = 'topology'
+# database password
+password = 'topology'
+# Name of the table in the database where the result from polling will be stored
+table = 'l2neighbors'
+# ip_column this column will store the ip address that identifies the device
+ip_field = 'ip'
+# neighbor_column is a column storing a layer 2 neighbor of the device
+neighbor_field = 'neighbor'
+
+# snmp contains the configuration necessary to access the devices via SNMP
+# in order to query cdp and lldp neighbors.
+[snmp]
+# version is the SNMP version. Currently only 1 and 2c are accepted values.
+version = '2c'
+# community contains the name of the SNMP community
+community = ''
+# oids are the OIDs that will be polled to obtain the layer 2 neighbors.
+# Mikrotik LLDP => 1.0.8802.1.1.2.1.4.1.1
+# Cisco LLDP    => 1.3.6.1.4.1.9.9.23.1.2.1.1.4
+oids = ['1.0.8802.1.1.2.1.4.1.1', '1.3.6.1.4.1.9.9.23.1.2.1.1.4']
