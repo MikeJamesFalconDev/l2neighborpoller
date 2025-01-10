@@ -15,11 +15,13 @@ def get_oid(oids, host):
                 value = host.get(oid)
             except Exception as e:
                 print(f'{oid} failed for {host}. {e}')
+                continue
             print(f'{oid} = {value}') 
         return value
 
 def get_neighbors(host):
+    print(f'Getting neighbors for {host}')
     config = get_snmp_config()
     neighbors = get_oid(config['oids'], host)
-    print(f'device {host} neighbors: {neighbors}')
+    print(f'Neighbors: {neighbors}')
     return neighbors
