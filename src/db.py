@@ -2,6 +2,7 @@ import mysql.connector
 import psycopg2
 import getpass
 import subprocess
+import re
 
 from config import get_devices_db_config, get_topology_db_config
 
@@ -47,7 +48,9 @@ def get_devices():
     with get_connection(config) as conn:
         for entry in query(config['query'], conn):
             if (config['ip_field'] in entry):
-                ips.append(entry[config['ip_field']])
+                ip = entry[config['ip_field']]
+                ip = re.sub(r'/\d+', ip, '')
+                ips.append(ip)
     print(f'Found devices:\n{ips}')
     return ips
 

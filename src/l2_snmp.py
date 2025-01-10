@@ -14,7 +14,7 @@ def get_oid(oids, host):
             try:
                 value = host.get(oid)
             except Exception as e:
-                print(f'{oid} failed for {host}. {e}')
+                print(f'{oid} failed for {host}. {type(e).__name__}')
                 continue
             print(f'{oid} = {value}') 
         return value
