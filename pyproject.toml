@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[console_scripts]
+l2np = "l2np:main"
+
+[project]
+name = "l2neighborpoller"
+version = "0.0.1"
+dependencies = [
+	"mysql-connector-python<=9.1.0",
+	"psycopg2-binary<=2.9.10",
+	"pycryptodome<=3.21.0",
+	"snmp<=0.8.0",
+	"toml<=0.10.2"
+	]
+
