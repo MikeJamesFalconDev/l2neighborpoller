@@ -6,6 +6,8 @@ import re
 
 from config import get_devices_db_config, get_topology_db_config
 
+ip_pattern = re.compile(r'(.*)/(\d+)?')
+
 def clean_db_config(config):
     clean_config = {**config}
     del clean_config["type"]
@@ -49,7 +51,9 @@ def get_devices():
         for entry in query(config['query'], conn):
             if (config['ip_field'] in entry):
                 ip = entry[config['ip_field']]
-                ip = re.sub(r'/\d+', ip, '')
+                m = re.match(ip_pattern, ip)
+                if m:
+                    ip = m.group(1)
                 ips.append(ip)
     print(f'Found devices:\n{ips}')
     return ips
