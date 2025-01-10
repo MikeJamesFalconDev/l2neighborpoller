@@ -10,7 +10,10 @@ def get_oid(oids, host):
         version = SNMPv2c if config['version'] != '2c' else SNMPv1
         host = engine.Manager(host, version=version)
         for oid in oids:
-            value = host.get(oid)
+            try:
+                value = host.get(oid)
+            except Exception as e:
+                print(f'{oid} failed for {host}. {e}')
             print(f'{oid} = {value}') 
         return value
 
