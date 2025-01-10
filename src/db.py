@@ -52,6 +52,8 @@ def get_devices():
     return ips
 
 def insert_neighbors(ip, neighbors):
+    if neighbors == None:
+        return
     config = get_topology_db_config()
     with get_connection(config) as conn:
         for neighbor in neighbors:
