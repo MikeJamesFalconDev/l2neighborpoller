@@ -3,3 +3,4 @@ psycopg2-binary==2.9.10
 pycryptodome==3.21.0
 snmp==0.8.0
 toml==0.10.2
+pysnmp=7.1.15
